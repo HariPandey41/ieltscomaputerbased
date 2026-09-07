@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Listening — Computer-Based Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="home-wrap">
+  <div class="home-eyebrow">MERO PRACTICE LAB</div>
+  <h1 class="home-title">IELTS Listening<br>Computer-Based Mock Test</h1>
+  <p class="home-sub">
+    Audio plays once, straight through, exactly as in the real exam. Answer as you listen,
+    then review your full mark scheme at the end.
+  </p>
+
+  <div id="test-list"></div>
+</div>
+
+<script>
+fetch('data/tests-manifest.json')
+  .then(r => r.json())
+  .then(tests => {
+    const wrap = document.getElementById('test-list');
+    if (!tests.length) {
+      wrap.innerHTML = '<p class="empty-note">No tests published yet. Add one in data/tests-manifest.json.</p>';
+      return;
+    }
+    wrap.innerHTML = tests.map(t => `
+      <div class="test-card">
+        <div>
+          <h2>${t.title}</h2>
+          <p>${t.questionCount} questions · ${t.durationLabel}</p>
+        </div>
+        <a class="btn" href="test.html?test=${encodeURIComponent(t.id)}">Start test</a>
+      </div>
+    `).join('');
+  })
+  .catch(() => {
+    document.getElementById('test-list').innerHTML =
+      '<p class="empty-note">Could not load data/tests-manifest.json.</p>';
+  });
+</script>
+
+</body>
+</html>
